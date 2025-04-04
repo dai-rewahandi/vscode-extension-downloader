@@ -1,0 +1,24 @@
+---
+import Line from '../icons/Line.astro'
+---
+
+<nav
+  class="w-72 h-8 flex items-center justify-between rounded-2xl px-3 backdrop-blur-xs bg-white/10 text-white border-white/10 border-2 hover:scale-[1.02]">
+  <h2 class="font-semibold tracking-wide text-xs">VED</h2>
+  <button data-button-nav>
+    <Line class:list={['w-3', 'hover:scale-[.8]', 'active:scale-[1.2]', 'line']} />
+  </button>
+</nav>
+
+<style>
+  nav {
+    transition: 0.3s cubic-bezier(0.25, 2.75, 0.5, 1);
+  }
+  .line {
+    transition: 0.3s cubic-bezier(0.25, 2.75, 0.5, 1);
+  }
+</style>
+
+<script>
+  const button = document.querySelector('[data-button-nav]')
+</script>

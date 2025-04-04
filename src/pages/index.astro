@@ -1,11 +1,60 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from '../layouts/Layout.astro'
+import Download from '../icons/download.astro'
 ---
 
 <Layout>
-	<Welcome />
+  <main class="w-full h-full grow flex items-center justify-center text-white gap-2 flex-col">
+    <input
+      type="text"
+      placeholder="https://"
+      data-link-target
+      class="flex items-center justify-between rounded-2xl px-3 backdrop-blur-xs bg-white/10 text-white border-white/10 border-2 hover:scale-[1.02] outline-0 md:w-md"
+    />
+    <input
+      type="text"
+      placeholder="Versi eg. 1.4.0"
+      data-version-target
+      class="w-40 flex items-center justify-between rounded-2xl px-3 backdrop-blur-xs bg-white/10 text-white border-white/10 border-2 hover:scale-[1.02] outline-0"
+    />
+    <div class="absolute bottom-10 flex items-center justify-center gap-4">
+      <span data-output></span>
+      <button data-download class="cursor-pointer">
+        <Download />
+      </button>
+    </div>
+  </main>
 </Layout>
+
+<style>
+  input,
+  button {
+    transition: 0.3s cubic-bezier(0.25, 2.75, 0.5, 1);
+  }
+</style>
+
+<script>
+  const input = document.querySelector('[data-link-target]') as HTMLInputElement
+  const output = document.querySelector('[data-output]') as HTMLParagraphElement
+  const download = document.querySelector('[data-download]') as HTMLButtonElement
+  const version = document.querySelector('[data-version-target]') as HTMLInputElement
+  input.addEventListener('input', () => {
+    const newinput = input.value.replace('https://marketplace.visualstudio.com/items?itemName=', '')
+    output.textContent = newinput
+    const packageName = newinput.split('.')[1]
+    const publishers = newinput.split('.')[0]
+    console.log(packageName)
+    console.log(publishers)
+    if (packageName && publishers) {
+      download.addEventListener('click', () => {
+        download.classList.remove('hidden')
+        window.open(
+          `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publishers}/vsextensions/${packageName}/${version.value}/vspackage`,
+        )
+      })
+    } else if (version!) {
+      download.classList.add('hidden')
+      alert('Link tidak valid')
+    }
+  })
+</script>

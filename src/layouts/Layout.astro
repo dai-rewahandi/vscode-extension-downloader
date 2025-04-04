@@ -1,22 +1,32 @@
+---
+import Bg from '../assets/bg.svg'
+const bg = `url(${Bg.src})`
+
+import '../styles/global.css'
+import Nav from "../components/Nav.astro";
+
+const { title } = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
+  <body class="w-screen min-h-screen flex flex-col">
+    <header class="w-full h-16 flex items-center justify-center">
+      <Nav />
+    </header>
+    <slot />
+  </body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+<style define:vars={{ bg }}>
+  body {
+    background: var(--bg);
+    background-color: black;
+    box-shadow: inset 0 0 100px rgb(0, 0, 0);
+  }
 </style>
