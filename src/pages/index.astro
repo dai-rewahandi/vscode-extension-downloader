@@ -19,7 +19,7 @@ import Download from '../icons/download.astro'
     />
     <div class="absolute bottom-10 flex items-center justify-center gap-4">
       <span data-output></span>
-      <button data-download class="cursor-pointer">
+      <button data-download class="cursor-pointer hidden">
         <Download />
       </button>
     </div>
@@ -37,24 +37,27 @@ import Download from '../icons/download.astro'
   const input = document.querySelector('[data-link-target]') as HTMLInputElement
   const output = document.querySelector('[data-output]') as HTMLParagraphElement
   const download = document.querySelector('[data-download]') as HTMLButtonElement
-  const version = document.querySelector('[data-version-target]') as HTMLInputElement
+
   input.addEventListener('input', () => {
-    const newinput = input.value.replace('https://marketplace.visualstudio.com/items?itemName=', '')
-    output.textContent = newinput
-    const packageName = newinput.split('.')[1]
-    const publishers = newinput.split('.')[0]
-    console.log(packageName)
-    console.log(publishers)
-    if (packageName && publishers) {
-      download.addEventListener('click', () => {
-        download.classList.remove('hidden')
+    const packadeAndDev = input.value.replace('https://marketplace.visualstudio.com/items?itemName=', '')
+    const packageName = packadeAndDev.split('.')[1]
+    const publishers = packadeAndDev.split('.')[0]
+    const version = document.querySelector('[data-version-target]') as HTMLInputElement
+    output.textContent = packageName ? packageName.toUpperCase() : ''
+    packageName ? download.classList.remove('hidden') : download.classList.add('hidden')
+    downloadExtension(packageName, publishers, version)
+  })
+
+  function downloadExtension(packageName: string, publishers: string, version: HTMLInputElement) {
+    download.addEventListener('click', () => {
+      if (packageName && publishers && version.value) {
         window.open(
           `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publishers}/vsextensions/${packageName}/${version.value}/vspackage`,
         )
-      })
-    } else if (version!) {
-      download.classList.add('hidden')
-      alert('Link tidak valid')
-    }
-  })
+      } else {
+        alert('error! Periksa kembali tautan dan versi.')
+      }
+    })
+  }
+
 </script>
